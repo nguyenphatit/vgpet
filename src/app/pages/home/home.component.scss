@@ -1,0 +1,103 @@
+/* Home page styles */
+ion-header ion-toolbar {
+    --background: var(--ion-color-light, #fff);
+    --padding-bottom: 0 !important;
+}
+
+.toolbar-container {
+    padding: 0 !important;
+}
+
+.pet-selector-row {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    // Optional: Hide scrollbar for a cleaner look
+    &::-webkit-scrollbar {
+        display: none; // For WebKit browsers (Chrome, Safari)
+    }
+
+    -ms-overflow-style: none; // For IE and Edge
+    scrollbar-width: none; // For Firefox
+}
+
+.pet-item {
+    display: inline-block; // Needed for horizontal layout within the flex container
+    margin-right: 16px;
+    cursor: pointer;
+    flex-shrink: 0; // Prevent items from shrinking
+
+    ion-avatar {
+        width: 60px; // Adjust size as needed
+        height: 60px; // Adjust size as needed
+        margin-left: auto;
+        margin-right: auto;
+        border: 3px solid transparent; // Base border, transparent by default
+        padding: 2px; // Space between image and border
+        box-sizing: border-box; // Include border and padding in element's total width and height
+        transition: border-color 0.3s ease; // Smooth transition for selection
+    }
+
+    // Style for the "ALL PETS" avatar
+    .all-pets-avatar {
+        border: 3px solid var(--ion-color-medium-shade, #ccc); // Greyish border
+        background-color: var(--ion-color-light-tint, #f4f4f4); // Light background
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .all-pets-text {
+            font-size: 0.7em; // Adjust as needed
+            font-weight: bold;
+            color: var(--ion-color-medium-shade, #555);
+            line-height: 1.2;
+            white-space: normal; // Allow text wrapping
+            max-width: 80%; // Prevent text overflowing tiny avatars
+        }
+    }
+
+    // Style for selected items (both ALL PETS and individual pets)
+    &.selected {
+        ion-avatar {
+            // Use the cyan/blue color from the image
+            border-color: #00bcd4; // Or use an Ionic color variable: var(--ion-color-secondary);
+        }
+
+        .pet-name {
+            // Optionally make selected pet name bolder or different color
+            // font-weight: bold;
+        }
+    }
+
+    // Style for individual pet avatars when *not* selected
+    &:not(.selected) ion-avatar:not(.all-pets-avatar) {
+        border-color: var(--ion-color-light-shade, #e0e0e0); // Faint border for unselected pets if needed
+        // Or keep border transparent if no border is desired for unselected
+    }
+
+    .pet-name {
+        display: block; // Ensure it takes its own line
+        margin-top: 4px;
+        font-size: 0.8em; // Adjust size as needed
+        color: var(--ion-color-medium-shade, #555);
+    }
+}
+
+// Ensure the last item doesn't get cut off abruptly
+.pet-selector-row .pet-item:last-child {
+    margin-right: 0; // Or keep the margin if padding-end on the row is sufficient
+}
+
+// Segment styles
+ion-segment {
+    --background: var(--ion-color-light, #fff); // Match toolbar background or make transparent
+
+    ion-segment-button {
+        --color: var(--ion-color-medium, #888); // Default text color
+        --color-checked: var(--ion-color-primary); // Text color for selected tab (e.g., blue)
+        --indicator-color: var(--ion-color-primary); // Underline color for selected tab (e.g., blue)
+        text-transform: uppercase; // Match image style
+        font-weight: 500;
+    }
+}

@@ -1,0 +1,56 @@
+.card-slide-up-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.card-full-width {
+  width: 100vw;
+  max-width: 100vw;
+  border-radius: 16px 16px 0 0;
+  margin-bottom: 0;
+  pointer-events: auto;
+  padding-bottom: 56px;
+}
+
+.card-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.card-slide-up.ng-leave {
+  animation: slideDown 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.custom-ion-button {
+  display: flex;
+  flex-direction: column;  
+}
+

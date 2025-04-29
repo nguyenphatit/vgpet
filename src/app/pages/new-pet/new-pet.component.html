@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar class="shadow-md mt-8">
+    <ion-buttons slot="start">
+      <ion-button *ngIf="currentStep === 1" (click)="navCtrl.back()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Your Pet Profile ({{ currentStep }}/{{ totalSteps }})</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Progress Bar -->
+  <ion-progress-bar [value]="progressValue" color="secondary"></ion-progress-bar>
+
+  <div class="step-container-wrapper ion-margin-top" [@stepAnimation]="currentStep">
+    <div [ngSwitch]="currentStep" class="step-container">
+
+      <!-- === STEP 1 === -->
+      <div *ngSwitchCase="1">
+        <ion-item lines="full">
+          <ion-label position="floating">Step 1 Field (e.g., Name)</ion-label>
+          <ion-input type="text" [(ngModel)]="formData.step1Field" required></ion-input>
+        </ion-item>
+        <p class="ion-padding-start ion-text-small">Enter the basic information.</p>
+      </div>
+
+      <!-- === STEP 2 === -->
+      <div *ngSwitchCase="2">
+        <ion-item lines="full">
+          <ion-label position="floating">Step 2 Field A (e.g., Category)</ion-label>
+          <ion-input type="text" [(ngModel)]="formData.step2FieldA"></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="floating">Step 2 Field B (e.g., Subcategory)</ion-label>
+          <ion-input type="text" [(ngModel)]="formData.step2FieldB"></ion-input>
+        </ion-item>
+        <p class="ion-padding-start ion-text-small">Provide more details.</p>
+      </div>
+
+      <!-- === STEP 3 === -->
+      <div *ngSwitchCase="3">
+        <ion-list>
+          <ion-radio-group [(ngModel)]="formData.step3Choice">
+            <!-- ... options ... -->
+          </ion-radio-group>
+        </ion-list>
+      </div>
+
+      <!-- === STEP 4 === -->
+      <div *ngSwitchCase="4">
+        <ion-item lines="full">
+          <!-- ... ion-datetime-button ... -->
+        </ion-item>
+      </div>
+
+      <!-- === STEP 5 === -->
+      <div *ngSwitchCase="5">
+        <ion-item lines="full">
+          <!-- ... ion-textarea ... -->
+        </ion-item>
+      </div>
+
+      <!-- === STEP 6 === -->
+      <div *ngSwitchCase="6">
+        <h4>Review Your Information</h4>
+        <ion-item lines="none">
+          <!-- ... ion-checkbox confirm ... -->
+        </ion-item>
+      </div>
+
+    </div> <!-- Kết thúc [ngSwitch] -->
+  </div> <!-- Kết thúc div wrapper animation -->
+
+</ion-content>
+
+<!-- Footer chứa các nút điều khiển -->
+<ion-footer class="ion-padding-bottom ion-no-border">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row [class]="currentStep === 1 ? 'ion-justify-content-end ion-align-items-center' : 'ion-justify-content-between ion-align-items-center'">
+        <ion-col size="auto">
+          <ion-button fill="outline" (click)="previousStep()" *ngIf="currentStep > 1">
+            <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+            Previous
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="auto" *ngIf="currentStep < totalSteps">
+          <ion-button fill="solid" (click)="nextStep()" color="primary">
+            Next
+            <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="auto" *ngIf="currentStep === totalSteps">
+          <ion-button fill="solid" (click)="createPet()" color="success"
+            [disabled]="!formData.step6Confirm">
+            <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+            Create Item
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

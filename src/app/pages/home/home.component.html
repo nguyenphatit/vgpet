@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar class="shadow-md">
+    <div class="flex flex-col bg-white">
+      <div class="w-full flex flex-row px-4 py-2 w-screen overflow-x-auto">
+        <div *ngFor="let pet of pets" class="pet-item ion-text-center" (click)="selectPet(pet)"
+          [class.selected]="selectedPet?.id === pet.id">
+          <ion-avatar>
+            <img [src]="pet.imageUrl" [alt]="pet.name" />
+          </ion-avatar>
+          <ion-label class="pet-name">{{ pet.name }}</ion-label>
+        </div>
+      </div>
+      <div class="w-full bg-gray-200">
+        <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)" mode="md">
+          <ion-segment-button value="profile">
+            <ion-label>PROFILE</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="diary">
+            <ion-label>DIARY</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="visits">
+            <ion-label>VISITS</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="docs">
+            <ion-label>DOCS</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+    Showing content for: {{ selectedPet ? selectedPet.name : 'All Pets' }} - {{ selectedSegment | titlecase }}
+  </div>
+</ion-content>
