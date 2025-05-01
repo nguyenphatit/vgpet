@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
-import { IonButton, IonHeader, IonToolbar, IonButtons, IonIcon, IonTitle, IonContent, IonProgressBar, IonItem, IonLabel, IonInput, IonList, IonRadioGroup, IonListHeader, IonRadio, IonDatetimeButton, IonModal, IonDatetime, IonTextarea, IonText, IonCheckbox, IonFooter, IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
+import { IonButton, IonHeader, IonToolbar, IonButtons, IonIcon, IonTitle, IonContent, IonProgressBar, IonItem, IonLabel, IonInput, IonList, IonRadioGroup, IonRadio, IonFooter, IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
 import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, query, group, animate } from '@angular/animations';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, arrowForwardOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { PetType } from '../../types/pet-type.type';
+import { PET_TYPES } from '../../common/initial-pet';
 
 const stepAnimation = trigger('stepAnimation', [
   // Transition khi bước tăng (đi tới)
@@ -87,13 +89,15 @@ const stepAnimation = trigger('stepAnimation', [
     IonTitle,
     FormsModule,
     CommonModule,
+    IonRadioGroup,
   ],
-  animations: [ stepAnimation ]
+  animations: [stepAnimation]
 })
 export class NewPetComponent implements OnInit {
   currentStep: number = 1;
   totalSteps: number = 6;
   progressValue: number = 0;
+  @Output() selectionChange = new EventEmitter<string | null>();
 
   formData: any = {
     name: '',
@@ -107,15 +111,19 @@ export class NewPetComponent implements OnInit {
     photo: '',
   };
 
+  petOptions: PetType[] = [];
+
   constructor(
     public navCtrl: NavController,
     private alertCtrl: AlertController,
   ) {
     addIcons({
-      'arrow-back-outline': arrowBackOutline,
-      'arrow-forward-outline': arrowForwardOutline,
-      'checkmark-circle-outline': checkmarkCircleOutline,
+      arrowBackOutline,
+      arrowForwardOutline,
+      checkmarkCircleOutline,
     });
+
+    this.petOptions = PET_TYPES;
   }
 
   ngOnInit() {
@@ -165,5 +173,9 @@ export class NewPetComponent implements OnInit {
       case 6: return 'Step 6: Confirm & Create';
       default: return 'Add New Item';
     }
+  }
+
+  handleChangePetType(pet: PetType) {
+    this.formData.type = pet.value;
   }
 }

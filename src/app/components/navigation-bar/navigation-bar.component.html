@@ -10,7 +10,7 @@
 
     <ion-tab-button class="bg-white">
       <ion-icon [name]="'add-outline'"
-        [class]="'bg-sky-400 rounded-full p-2 text-white transition-transform ease-in-out ' + (openCard ? 'rotate-45' : '')"
+        [class]="'ion-bg-primary rounded-full p-2 text-white transition-transform ease-in-out ' + (openCard ? 'rotate-45' : '')"
         (click)="toggleCard()"></ion-icon>
     </ion-tab-button>
 
@@ -24,39 +24,38 @@
   </ion-tab-bar>
 
   <div *ngIf="openCard" class="card-slide-up-container">
-    <ion-card class="card-slide-up card-full-width bg-sky-400" [@slideCard]="cardState"
+    <ion-card class="card-slide-up card-full-width ion-bg-primary" [@slideCard]="cardState"
       (@slideCard.done)="onCardAnimationDone($event)" (click)="onCardClick()">
       <ion-card-header>
         <ion-card-title>
           <ion-row class="flex justify-center items-center pt-4 pb-2">
             <ion-col class="text-center flex justify-center items-center">
               <button class="flex flex-col items-center">
-                <ion-icon [name]="'calendar-outline'" class="text-sky-400 bg-white rounded-md p-2"></ion-icon>
+                <ion-icon color="primary" [name]="'calendar-outline'" class="bg-white rounded-md p-2"></ion-icon>
                 <span class="text-sm font-light text-white">Appointment</span>
               </button>
             </ion-col>
             <ion-col class="text-center flex justify-center items-center">
               <button class="flex flex-col items-center">
-                <ion-icon [name]="'pencil-outline'" class="text-sky-400 bg-white rounded-md p-2"></ion-icon>
+                <ion-icon color="primary" [name]="'pencil-outline'" class="bg-white rounded-md p-2"></ion-icon>
                 <span class="text-sm font-light text-white">Diary Update</span>
               </button>
             </ion-col>
             <ion-col class="text-center flex justify-center items-center">
               <button class="flex flex-col items-center">
-                <ion-icon [name]="'chatbox-ellipses-outline'" class="text-sky-400 bg-white rounded-md p-2"></ion-icon>
+                <ion-icon color="primary" [name]="'chatbox-ellipses-outline'" class="bg-white rounded-md p-2"></ion-icon>
                 <span class="text-sm font-light text-white">Chat</span>
               </button>
             </ion-col>
             <ion-col class="text-center flex justify-center items-center">
               <button class="flex flex-col items-center" [routerLink]="['/new-pet']">
-                <ion-icon [name]="'paw-outline'" class="text-sky-400 bg-white rounded-md p-2"></ion-icon>
+                <ion-icon color="primary" [name]="'paw-outline'" class="bg-white rounded-md p-2"></ion-icon>
                 <span class="text-sm font-light text-white">New Pet</span>
               </button>
             </ion-col>
           </ion-row>
         </ion-card-title>
       </ion-card-header>
-
     </ion-card>
   </div>
 </ion-tabs>

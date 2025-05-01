@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IonTabs, IonTabButton, IonTabBar, IonIcon, ActionSheetController, IonCard, IonCardHeader, IonCardTitle, IonRow, IonCol } from "@ionic/angular/standalone";
+import { IonTabs, IonTabButton, IonTabBar, IonIcon, ActionSheetController, IonCard, IonCardHeader, IonCardTitle, IonRow, IonCol, IonFab, IonFabButton } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { pawOutline, calendarOutline, settingsOutline, libraryOutline, addOutline, pencilOutline, chatboxEllipsesOutline, homeOutline } from 'ionicons/icons';
 import { ROUTE_TAB } from '../../common/constants';
@@ -24,7 +24,7 @@ import { CommonModule } from '@angular/common';
     IonCardTitle,
     IonRow,
     IonCol,
-    RouterModule
+    RouterModule,
 ],
   animations: [
     trigger('slideCard', [
@@ -51,7 +51,7 @@ export class NavigationBarComponent implements OnInit {
   cardState: 'visible' | 'hidden' = 'hidden';
 
   constructor(private actionSheetController: ActionSheetController) {
-    addIcons({ homeOutline, calendarOutline, pencilOutline, chatboxEllipsesOutline, pawOutline, settingsOutline, libraryOutline, addOutline, });
+    addIcons({homeOutline,calendarOutline,pencilOutline,chatboxEllipsesOutline,pawOutline,settingsOutline,libraryOutline,addOutline,});
   }
 
   ngOnInit() { }

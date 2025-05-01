@@ -1,0 +1,12 @@
+import { PetType } from "../types/pet-type.type";
+
+export const PET_TYPES: PetType[] = [
+    { id: 1, name: 'Dog', value: 'dog', image: 'https://i.pinimg.com/736x/26/82/bf/2682bf05bc23c0b6a1145ab9c966374b.jpg' },
+    { id: 2, name: 'Cat', value: 'cat', image: 'https://i.pinimg.com/736x/0c/82/fb/0c82fb72d66bd68a7175ac12a95267fc.jpg' },
+    { id: 3, name: 'Horse', value: 'horse', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnc4QDqpsa2JHQqWNmCIxYmLi0T368CfNenQ&s' },
+    { id: 4, name: 'Bovine', value: 'bovine', image: 'https://i.pinimg.com/736x/eb/b4/a3/ebb4a39eb5f19ce2f6049fdbf6c4f208.jpg' }, // Bò
+    { id: 5, name: 'Ovine', value: 'ovine', image: 'https://i.pinimg.com/474x/36/99/8d/36998d38fbcc79970251a2b39ec3be96.jpg' }, // Cừu
+    { id: 6, name: 'Caprine', value: 'caprine', image: 'https://i.imgflip.com/2glzre.jpg?a484752' }, // Dê
+    { id: 7, name: 'Porcine', value: 'porcine', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWhNqXFQTKuGASD7Umal4WutB0_OAygb7hqw&s' }, // Lợn
+    { id: 8, name: 'Avian', value: 'avian', image: 'https://i.pinimg.com/474x/36/b0/a9/36b0a9ad2fbaa87a76b9cd3e6d128d3c.jpg' }, // Chim
+]

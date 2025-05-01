@@ -12,7 +12,7 @@
 <ion-content class="ion-padding">
 
   <!-- Progress Bar -->
-  <ion-progress-bar [value]="progressValue" color="secondary"></ion-progress-bar>
+  <ion-progress-bar [value]="progressValue" color="primary"></ion-progress-bar>
 
   <div class="step-container-wrapper ion-margin-top" [@stepAnimation]="currentStep">
     <div [ngSwitch]="currentStep" class="step-container">
@@ -20,23 +20,45 @@
       <!-- === STEP 1 === -->
       <div *ngSwitchCase="1">
         <ion-item lines="full">
-          <ion-label position="floating">Step 1 Field (e.g., Name)</ion-label>
-          <ion-input type="text" [(ngModel)]="formData.step1Field" required></ion-input>
+          <ion-label position="floating">What is the name of your pet?</ion-label>
+          <ion-input type="text" [(ngModel)]="formData.name" required></ion-input>
         </ion-item>
-        <p class="ion-padding-start ion-text-small">Enter the basic information.</p>
       </div>
 
       <!-- === STEP 2 === -->
       <div *ngSwitchCase="2">
-        <ion-item lines="full">
-          <ion-label position="floating">Step 2 Field A (e.g., Category)</ion-label>
-          <ion-input type="text" [(ngModel)]="formData.step2FieldA"></ion-input>
-        </ion-item>
-        <ion-item lines="full">
-          <ion-label position="floating">Step 2 Field B (e.g., Subcategory)</ion-label>
-          <ion-input type="text" [(ngModel)]="formData.step2FieldB"></ion-input>
-        </ion-item>
-        <p class="ion-padding-start ion-text-small">Provide more details.</p>
+        <ion-label class="w-full pb-6">What kind of pet is {{formData.name}}?</ion-label>
+        <!-- <ion-radio-group [compareWith]="compareWith" (ionChange)="onPetChange($event)">
+          <ion-grid>
+            <ion-row>
+              @for (pet of petOptions; track pet.value) {
+                <ion-col size="6" class="mt-6">
+                  <ion-item lines="none">
+                    <ion-radio [value]="pet.value" class="ion-hide"></ion-radio>
+                    <div class="cursor-pointer">
+                      <img [src]="pet.image" [alt]="pet.name" class="rounded-lg" />
+                    <ion-label class="w-full text-center">{{ pet.name }}</ion-label>
+                  </div>
+                </ion-item>
+              </ion-col>
+              }
+            </ion-row>
+          </ion-grid>
+        </ion-radio-group> -->
+
+        <ion-grid>
+          <ion-row>
+            @for (pet of petOptions; track pet.id) {
+            <ion-col size="6" class="mt-6">
+              <div [ngClass]="{ 'bg-primary': formData.type === pet.value, 'text-white': formData.type === pet.value }" class="cursor-pointer rounded-lg p-2"
+                (click)="handleChangePetType(pet)">
+                <img [src]="pet.image" [alt]="pet.name" class="rounded-lg w-[250px] h-[250px] object-cover" />
+                <ion-label>{{ pet.name }}</ion-label>
+              </div>
+            </ion-col>
+            }
+          </ion-row>
+        </ion-grid>
       </div>
 
       <!-- === STEP 3 === -->
@@ -77,9 +99,10 @@
 
 <!-- Footer chứa các nút điều khiển -->
 <ion-footer class="ion-padding-bottom ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="px-4">
     <ion-grid>
-      <ion-row [class]="currentStep === 1 ? 'ion-justify-content-end ion-align-items-center' : 'ion-justify-content-between ion-align-items-center'">
+      <ion-row
+        [class]="currentStep === 1 ? 'ion-justify-content-end ion-align-items-center' : 'ion-justify-content-between ion-align-items-center'">
         <ion-col size="auto">
           <ion-button fill="outline" (click)="previousStep()" *ngIf="currentStep > 1">
             <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
@@ -95,8 +118,7 @@
         </ion-col>
 
         <ion-col size="auto" *ngIf="currentStep === totalSteps">
-          <ion-button fill="solid" (click)="createPet()" color="success"
-            [disabled]="!formData.step6Confirm">
+          <ion-button fill="solid" (click)="createPet()" color="success" [disabled]="!formData.step6Confirm">
             <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
             Create Item
           </ion-button>
