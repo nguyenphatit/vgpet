@@ -27,35 +27,19 @@
 
       <!-- === STEP 2 === -->
       <div *ngSwitchCase="2">
-        <ion-label class="w-full pb-6">What kind of pet is {{formData.name}}?</ion-label>
-        <!-- <ion-radio-group [compareWith]="compareWith" (ionChange)="onPetChange($event)">
-          <ion-grid>
-            <ion-row>
-              @for (pet of petOptions; track pet.value) {
-                <ion-col size="6" class="mt-6">
-                  <ion-item lines="none">
-                    <ion-radio [value]="pet.value" class="ion-hide"></ion-radio>
-                    <div class="cursor-pointer">
-                      <img [src]="pet.image" [alt]="pet.name" class="rounded-lg" />
-                    <ion-label class="w-full text-center">{{ pet.name }}</ion-label>
-                  </div>
-                </ion-item>
-              </ion-col>
-              }
-            </ion-row>
-          </ion-grid>
-        </ion-radio-group> -->
-
+        <ion-label class="w-full pb-6">What kind of pet is {{ formData.name }}?</ion-label>
         <ion-grid>
           <ion-row>
             @for (pet of petOptions; track pet.id) {
-            <ion-col size="6" class="mt-6">
-              <div [ngClass]="{ 'bg-primary': formData.type === pet.value, 'text-white': formData.type === pet.value }" class="cursor-pointer rounded-lg p-2"
-                (click)="handleChangePetType(pet)">
-                <img [src]="pet.image" [alt]="pet.name" class="rounded-lg w-[250px] h-[250px] object-cover" />
-                <ion-label>{{ pet.name }}</ion-label>
-              </div>
-            </ion-col>
+              <ion-col size="6" class="mt-6">
+                <div
+                  [ngClass]="{ 'bg-primary': formData.type === pet.value, 'text-white': formData.type === pet.value }"
+                  class="cursor-pointer rounded-lg p-2"
+                  (click)="handleChangePetType(pet)">
+                  <img [src]="pet.image" [alt]="pet.name" class="rounded-lg w-[250px] h-[250px] object-cover"/>
+                  <ion-label>{{ pet.name }}</ion-label>
+                </div>
+              </ion-col>
             }
           </ion-row>
         </ion-grid>
@@ -63,25 +47,220 @@
 
       <!-- === STEP 3 === -->
       <div *ngSwitchCase="3">
-        <ion-list>
-          <ion-radio-group [(ngModel)]="formData.step3Choice">
-            <!-- ... options ... -->
-          </ion-radio-group>
-        </ion-list>
+        <ion-label class="w-full pb-6">What breed is your {{ formData.type }}, {{ formData.name }}?</ion-label>
+
+        <div class="mb-4">
+          <p class="text-sm font-medium text-blue-600 mb-1">
+            {{ selectedBreedsCountText }}
+          </p>
+          <div *ngIf="formData.breed.length > 0" class="bg-white rounded-lg shadow">
+            <div *ngFor="let breed of formData.breed; let last = last"
+                 class="flex items-center justify-between px-4 py-3 text-gray-800"
+                 [ngClass]="{'border-b border-gray-200': !last}">
+              <span>{{ breed }}</span>
+              <ion-icon
+                name="close-outline"
+                class="text-gray-500 cursor-pointer text-xl hover:text-red-500"
+                (click)="deselectBreed(breed)"
+                aria-label="Deselect breed"
+              ></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <ion-icon name="search-outline" class="text-gray-400"></ion-icon>
+          </div>
+          <input
+            type="text"
+            [value]="searchTerm"
+            (input)="handleSearch($event)"
+            placeholder="Search breed"
+            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+        </div>
+
+        <div class="bg-white rounded-lg shadow">
+          <ion-list lines="full" class="py-0">
+            <ion-item
+              *ngFor="let breed of filteredBreeds"
+              (click)="toggleBreedSelection(breed)"
+              button
+              detail="false"
+              class="hover:bg-gray-50"
+              [ngClass]="{'bg-blue-50': isSelected(breed)}"
+            >
+              <ion-label
+                [ngClass]="{'text-blue-600 font-semibold': isSelected(breed), 'text-gray-700': !isSelected(breed)}">
+                {{ breed }}
+              </ion-label>
+              <ion-icon
+                *ngIf="isSelected(breed)"
+                name="checkmark-outline"
+                slot="end"
+                class="text-green-500 text-xl"
+              ></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="filteredBreeds.length === 0 && searchTerm">
+              <ion-label class="text-center text-gray-500">No breeds found for "{{ searchTerm }}"</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
       </div>
 
       <!-- === STEP 4 === -->
       <div *ngSwitchCase="4">
-        <ion-item lines="full">
-          <!-- ... ion-datetime-button ... -->
-        </ion-item>
+        <ion-label class="w-full pb-6">What gender is your {{ formData.type }}, {{ formData.name }}?</ion-label>
+        <div class="grid grid-cols-3 ion-align-items-center gap-4 ion-margin-top">
+          <div [ngClass]="{ 'bg-primary': formData.gender === 'male', 'text-white': formData.gender === 'male' }"
+               class="flex items-center justify-center border-2 border-gray-300 rounded-md p-4 cursor-pointer flex flex-col text-gray-400"
+               (click)="selectGender('male')">
+            <ion-icon name="male-outline" class="text-4xl"></ion-icon>
+            <div>Male</div>
+          </div>
+          <div [ngClass]="{ 'bg-primary': formData.gender === 'female', 'text-white': formData.gender === 'female' }"
+               class="flex items-center justify-center border-2 border-gray-300 rounded-md p-4 cursor-pointer flex flex-col text-gray-400"
+               (click)="selectGender('female')">
+            <ion-icon name="female-outline" class="text-4xl"></ion-icon>
+            <div>Feale</div>
+          </div>
+          <div [ngClass]="{ 'bg-primary': formData.gender === 'unknown', 'text-white': formData.gender === 'unknown' }"
+               class="flex items-center justify-center border-2 border-gray-300 rounded-md p-4 cursor-pointer flex flex-col text-gray-400"
+               (click)="selectGender('unknown')">
+            <ion-icon name="help-outline" class="text-4xl"></ion-icon>
+            <div>Unknown</div>
+          </div>
+        </div>
       </div>
 
       <!-- === STEP 5 === -->
       <div *ngSwitchCase="5">
-        <ion-item lines="full">
-          <!-- ... ion-textarea ... -->
-        </ion-item>
+        <div class="max-w-lg mx-auto">
+          <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-3">When was {{ formData.name }} born?</h2>
+
+            <ion-radio-group
+              [(ngModel)]="birthInputMode"
+              (ionChange)="updateFormDataOnStateChange()"
+              class="flex items-center space-x-6 mb-3"
+            >
+              <label class="flex items-center cursor-pointer">
+                <ion-radio value="birthdate" mode="md" class="custom-radio"></ion-radio>
+                <span class="ml-2 text-gray-700 text-lg">Birthdate</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <ion-radio value="age" mode="md" class="custom-radio"></ion-radio>
+                <span class="ml-2 text-gray-700 text-lg">Age</span>
+              </label>
+            </ion-radio-group>
+
+            <p class="text-sm text-gray-600 mb-4">
+              If not sure please select the approximate date.
+            </p>
+
+            <!-- Conditional Inputs -->
+            <div *ngIf="birthInputMode === 'birthdate'">
+              <ion-input
+                type="date"
+                [(ngModel)]="formData.birthdate"
+                class="custom-input w-full"
+                (ionChange)="updateFormDataOnStateChange()"
+              placeholder="YYYY-MM-DD"
+              ></ion-input>
+            </div>
+
+            <div *ngIf="birthInputMode === 'age'" class="grid grid-cols-3 gap-3">
+              <div>
+                <ion-label class="text-xs text-gray-500 mb-1 block">Years</ion-label>
+                <ion-input
+                  type="number"
+                  inputmode="numeric"
+                  [(ngModel)]="ageYears"
+                  (ionBlur)="handleAgeValueChange('ageYears')"
+                  min="0"
+                  class="custom-input text-center"
+                  placeholder="0"
+                ></ion-input>
+              </div>
+              <div>
+                <ion-label class="text-xs text-gray-500 mb-1 block">Months</ion-label>
+                <ion-input
+                  type="number"
+                  inputmode="numeric"
+                  [(ngModel)]="ageMonths"
+                  (ionBlur)="handleAgeValueChange('ageMonths')"
+                  min="0" max="11"
+                  class="custom-input text-center"
+                  placeholder="0"
+                ></ion-input>
+              </div>
+              <div>
+                <ion-label class="text-xs text-gray-500 mb-1 block">Days</ion-label>
+                <ion-input
+                  type="number"
+                  inputmode="numeric"
+                  [(ngModel)]="ageDays"
+                  (ionBlur)="handleAgeValueChange('ageDays')"
+                  min="0" max="30"
+                class="custom-input text-center"
+                placeholder="0"
+                ></ion-input>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">How is {{ formData.name }}'s state now?</h2>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-4">
+              <div>
+                <ion-label class="text-sm text-blue-600 font-medium mb-1 block">Reproductive Status</ion-label>
+                <ion-item lines="none" class="rounded-lg border border-gray-300 p-0 flex ion-justify-content-between" >
+                  <ion-select
+                    interface="action-sheet"
+                    [(ngModel)]="formData.reproductive"
+                    (ionChange)="updateFormDataOnStateChange()"
+                  class="w-full custom-select"
+                  placeholder="Select Status"
+                  >
+                  <ion-select-option *ngFor="let option of reproductiveStatusOptions" [value]="option">
+                    {{ option }}
+                  </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </div>
+
+              <div>
+                <ion-label class="text-sm text-blue-600 font-medium mb-1 block">Weight</ion-label>
+                <div class="flex items-center">
+                  <ion-input
+                    type="number"
+                    inputmode="decimal"
+                    [(ngModel)]="formData.weight"
+                    (ionBlur)="handleWeightChange()"
+                    min="0"
+                    step="0.1"
+                    class="custom-input"
+                    placeholder="0"
+                  ></ion-input>
+                  <span class="ml-2 text-gray-600">kg</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allergies Section -->
+          <div>
+            <ion-label class="text-sm text-blue-600 font-medium mb-1 block">Allergies</ion-label>
+            <ion-textarea
+              [(ngModel)]="formData.allergies"
+              (ionChange)="updateFormDataOnStateChange()"
+            placeholder="Enter any known allergies"
+            rows="4"
+            class="custom-textarea bg-white rounded-md"
+            ></ion-textarea>
+          </div>
+        </div>
       </div>
 
       <!-- === STEP 6 === -->
@@ -111,14 +290,14 @@
         </ion-col>
 
         <ion-col size="auto" *ngIf="currentStep < totalSteps">
-          <ion-button fill="solid" (click)="nextStep()" color="primary">
+          <ion-button fill="solid" (click)="nextStep()" [disabled]="disableCreateButton()" color="primary">
             Next
             <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
           </ion-button>
         </ion-col>
 
         <ion-col size="auto" *ngIf="currentStep === totalSteps">
-          <ion-button fill="solid" (click)="createPet()" color="success" [disabled]="!formData.step6Confirm">
+          <ion-button fill="solid" (click)="createPet()" color="success" [disabled]="disableCreateButton()">
             <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
             Create Item
           </ion-button>
