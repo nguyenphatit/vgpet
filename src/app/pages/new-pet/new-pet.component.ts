@@ -21,6 +21,7 @@ import {
   IonGrid,
   IonRow,
   IonCol, IonTextarea, IonSelect, IonSelectOption,
+  ActionSheetController,
 } from "@ionic/angular/standalone";
 import {FormsModule} from '@angular/forms';
 import {trigger, transition, style, query, group, animate} from '@angular/animations';
@@ -31,10 +32,11 @@ import {
   checkmarkCircleOutline,
   checkmarkOutline,
   closeOutline, femaleOutline, helpOutline, maleOutline,
-  searchOutline
+  searchOutline, cameraOutline, imageOutline,
 } from 'ionicons/icons';
 import {CreatePetType, PetType} from '../../types/pet-type.type';
 import {BREEDS, PET_TYPES} from '../../common/initial-pet';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 const stepAnimation = trigger('stepAnimation', [
   // Transition khi bước tăng (đi tới)
@@ -153,6 +155,7 @@ export class NewPetComponent implements OnInit {
 
   constructor(
     public navCtrl: NavController,
+    public actionSheetController: ActionSheetController,
     private alertCtrl: AlertController,
   ) {
     addIcons({
@@ -165,6 +168,8 @@ export class NewPetComponent implements OnInit {
       maleOutline,
       femaleOutline,
       helpOutline,
+      imageOutline,
+      cameraOutline,
     });
 
     this.petOptions = PET_TYPES;
@@ -197,6 +202,7 @@ export class NewPetComponent implements OnInit {
   async createPet() {
     console.log('Creating item with data:', this.formData);
     await this.presentAlert('Success', 'Item would be created here!');
+    this.formData = { name: '', type: '', breed: [], gender: '', birthdate: '', weight: 0, reproductive: '', allergies: '', photo: ''}
     this.navCtrl.navigateBack('/home');
   }
 
@@ -255,19 +261,13 @@ export class NewPetComponent implements OnInit {
     if (this.birthInputMode === 'age') {
       this.formData.birthdate = this.calculateBirthdateFromAge();
     } else {
-      // If switching to 'birthdate' mode and formData.birthdate is null
-      // (e.g., initial load in 'birthdate' mode or cleared previously),
-      // set it to today. Otherwise, it retains its previous value.
       if (!this.formData.birthdate) {
         this.formData.birthdate = this.formatDateToYYYYMMDD(new Date());
       }
     }
-    // Log formData to see changes (for debugging)
-    console.log('formData updated:', JSON.parse(JSON.stringify(this.formData)));
   }
 
   calculateBirthdateFromAge(): string {
-    // If all age fields are null, perhaps return null or today's date
     if (this.ageYears === null && this.ageMonths === null && this.ageDays === null) {
       return this.formatDateToYYYYMMDD(new Date()); // Default to today if no age specified
     }
@@ -292,7 +292,6 @@ export class NewPetComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  // Handle changes in numeric inputs for age, ensuring non-negative values
   handleAgeValueChange(field: 'ageYears' | 'ageMonths' | 'ageDays') {
     let value = (this as any)[field] as number | null;
 
@@ -332,6 +331,53 @@ export class NewPetComponent implements OnInit {
         return !this.formData.gender;
       default:
         return false;
+    }
+  }
+
+  async selectImageSource() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Chọn nguồn ảnh',
+      buttons: [
+        {
+          text: 'Chụp ảnh',
+          icon: 'camera-outline',
+          handler: () => {
+            this.takePicture(CameraSource.Camera);
+          },
+        },
+        {
+          text: 'Chọn từ thư viện',
+          icon: 'image-outline',
+          handler: () => {
+            this.takePicture(CameraSource.Photos);
+          },
+        },
+        {
+          text: 'Hủy',
+          role: 'cancel',
+        },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+
+  async takePicture(source: CameraSource) {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.DataUrl,
+        source,
+      });
+
+      if (image && image.dataUrl) {
+        this.formData.photo = image.dataUrl;
+      }
+
+      console.log('Image:', this.formData.photo);
+    } catch (error) {
+      console.error('Lỗi khi chụp hoặc chọn ảnh', error);
     }
   }
 }

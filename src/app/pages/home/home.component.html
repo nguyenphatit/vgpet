@@ -3,7 +3,7 @@
     <div class="flex flex-col bg-white">
       <div class="w-full flex flex-row px-4 py-2 w-screen overflow-x-auto">
         <div *ngFor="let pet of pets" class="pet-item ion-text-center" (click)="selectPet(pet)"
-          [class.selected]="selectedPet?.id === pet.id">
+          [class.selected]="isSelected(pet)">
           <ion-avatar>
             <img [src]="pet.imageUrl" [alt]="pet.name" />
           </ion-avatar>
@@ -32,6 +32,6 @@
 
 <ion-content [fullscreen]="true">
   <div class="ion-padding">
-    Showing content for: {{ selectedPet ? selectedPet.name : 'All Pets' }} - {{ selectedSegment | titlecase }}
+    {{ selectedSegment | titlecase }}
   </div>
 </ion-content>

@@ -146,11 +146,11 @@
               class="flex items-center space-x-6 mb-3"
             >
               <label class="flex items-center cursor-pointer">
-                <ion-radio value="birthdate" mode="md" class="custom-radio"></ion-radio>
+                <ion-radio value="birthdate" mode="md"></ion-radio>
                 <span class="ml-2 text-gray-700 text-lg">Birthdate</span>
               </label>
               <label class="flex items-center cursor-pointer">
-                <ion-radio value="age" mode="md" class="custom-radio"></ion-radio>
+                <ion-radio value="age" mode="md"></ion-radio>
                 <span class="ml-2 text-gray-700 text-lg">Age</span>
               </label>
             </ion-radio-group>
@@ -166,7 +166,7 @@
                 [(ngModel)]="formData.birthdate"
                 class="custom-input w-full"
                 (ionChange)="updateFormDataOnStateChange()"
-              placeholder="YYYY-MM-DD"
+                placeholder="YYYY-MM-DD"
               ></ion-input>
             </div>
 
@@ -203,8 +203,8 @@
                   [(ngModel)]="ageDays"
                   (ionBlur)="handleAgeValueChange('ageDays')"
                   min="0" max="30"
-                class="custom-input text-center"
-                placeholder="0"
+                  class="custom-input text-center"
+                  placeholder="0"
                 ></ion-input>
               </div>
             </div>
@@ -215,17 +215,17 @@
             <div class="grid grid-cols-2 gap-x-4 gap-y-4">
               <div>
                 <ion-label class="text-sm text-blue-600 font-medium mb-1 block">Reproductive Status</ion-label>
-                <ion-item lines="none" class="rounded-lg border border-gray-300 p-0 flex ion-justify-content-between" >
+                <ion-item lines="none" class="rounded-lg border border-gray-300 p-0 flex ion-justify-content-between">
                   <ion-select
                     interface="action-sheet"
                     [(ngModel)]="formData.reproductive"
                     (ionChange)="updateFormDataOnStateChange()"
-                  class="w-full custom-select"
-                  placeholder="Select Status"
+                    class="w-full custom-select"
+                    placeholder="Select Status"
                   >
-                  <ion-select-option *ngFor="let option of reproductiveStatusOptions" [value]="option">
-                    {{ option }}
-                  </ion-select-option>
+                    <ion-select-option *ngFor="let option of reproductiveStatusOptions" [value]="option">
+                      {{ option }}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
               </div>
@@ -255,9 +255,9 @@
             <ion-textarea
               [(ngModel)]="formData.allergies"
               (ionChange)="updateFormDataOnStateChange()"
-            placeholder="Enter any known allergies"
-            rows="4"
-            class="custom-textarea bg-white rounded-md"
+              placeholder="Enter any known allergies"
+              rows="4"
+              class="custom-textarea bg-white rounded-md"
             ></ion-textarea>
           </div>
         </div>
@@ -265,14 +265,32 @@
 
       <!-- === STEP 6 === -->
       <div *ngSwitchCase="6">
-        <h4>Review Your Information</h4>
-        <ion-item lines="none">
-          <!-- ... ion-checkbox confirm ... -->
-        </ion-item>
+        <h4>Add a photo of {{formData.name}}</h4>
+
+        <div class="grid grid-cols-2 gap-x-4 gap-y-4">
+          <button
+            (click)="selectImageSource()"
+            class="flex flex-col items-center justify-center rounded-lg border border-gray-300 bg-white !p-8"
+          >
+            <ion-icon name="camera-outline" size="large"></ion-icon>
+            <span class="mt-2 text-sm text-gray-600">Chụp ảnh</span>
+          </button>
+
+          <button
+            (click)="selectImageSource()"
+            class="flex flex-col items-center justify-center rounded-lg border border-gray-300 bg-white !p-8"
+          >
+            <ion-icon name="image-outline" size="large"></ion-icon>
+            <span class="mt-2 text-sm text-gray-600">Thư viện</span>
+          </button>
+        </div>
+        @if (!!formData.photo) {
+          <img [src]="formData.photo" alt="Ảnh đã chọn" class="max-w-md rounded-md"/>
+        }
       </div>
 
-    </div> <!-- Kết thúc [ngSwitch] -->
-  </div> <!-- Kết thúc div wrapper animation -->
+    </div>
+  </div>
 
 </ion-content>
 
